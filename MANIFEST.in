@@ -1,0 +1,5 @@
+include LICENSE
+include README.rst
+recursive-include backend/*
+recursive-include vault_backend/*
+recursive-include docs *

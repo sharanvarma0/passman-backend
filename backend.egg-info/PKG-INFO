@@ -1,0 +1,58 @@
+Metadata-Version: 2.1
+Name: backend
+Version: 1.0
+Summary: A django and DRF based password manager API for local use
+Home-page: UNKNOWN
+Author: SHARAN VARMA
+Author-email: sharanvarma0@gmail.com
+License: BSD-3-Clause
+Platform: UNKNOWN
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 3.2.3
+Classifier: Framework :: rest_framework
+Classifier: Framework :: rest_framework :: 3.12.4
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Users
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :; Python :: 3 :: Only
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: API
+Requires-Python: >=3.8
+License-File: LICENSE
+
+===============
+PassMan-Backend
+===============
+
+PassMan-backend is a backend REST API written in Django REST Framework as an implementation for a password manager. Each password record is stored in a vault which is tied to a single user instance.
+The vault file is stored in local system and is not sent to any third party. For this reason, it is very important to remember the master password which unlocks the vault. Fortunately, this has been
+combined with the sign in process so as soon as you sign in, you will have access to all your stored passwords. 
+
+Detailed Documentation in the "docs" directory
+
+Quick Start
+------------
+1. Add PassMan-backend to your installed apps setting in your application's settings.py file
+    INSTALLED_APPS = [
+        ....,
+        'backend',
+        ....,
+    ]
+
+2. Include the backend in the URLConf like this
+    path('passman/',include(backend.urls)
+
+3. Run `python manage.py migrate` to construct the database tables
+4. Start the development server
+    `python manage.py runserver`
+
+5. Navigate to "http://127.0.0.1:8000/backend/<endpoint>" to invoke functionality provided by each endpoint ("users/","vaults/", "records/")
+
+
+
+
+
