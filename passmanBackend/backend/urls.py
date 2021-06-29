@@ -17,13 +17,16 @@ Including another URLconf
 # Serializers are in 'vault_serializers.py'
 # viewsets are in 'vault_viewsets.py'
 
+# Importing all viewsets defined and other functions. 
+
 from django.urls import path, include
 from rest_framework import routers
-from rest_framework.response import Response
-from vault_backend import models
 from rest_framework.authtoken import views
 from backend.vault_viewsets import *
 
+
+# Using the rest_framework provided router class here to automatically generate views from viewsets defined. Makes things a lot easier. I have used defaultRouter here.
+# Might use another router in the future if it makes things easy. As you know, still learning :).
 
 router = routers.DefaultRouter()
 router.register(r'vaults',VaultViewSet, basename='vault')

@@ -1,3 +1,8 @@
+''' 
+Mostly these are internal imports related to django and rest_framework.
+The os and io imports are for creating files, paths and parsing bytes objects respectively 
+'''
+
 from django.db import models
 from django.contrib.auth.models import User
 from rest_framework.renderers import JSONRenderer
@@ -6,6 +11,12 @@ from vault_backend.extra_functions import *
 import os
 import io
 
+
+''' 
+The Vault model represents the basic password vault in passman. This model will store the directory path, filename and vault_name specified. This is linked to the User model for only displaying vaults belonging
+to the authenticated user. The Vault model is later referenced in different places for creating and updating records stored in it. 
+'''
+
 class Vault(models.Model):
     number = models.IntegerField(primary_key=True)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -13,7 +24,7 @@ class Vault(models.Model):
     directory = models.CharField(max_length=200, default='/home/sharan/.vaults')
     filename = models.CharField(max_length=200, default="vault")
 
-
+    # Create a new vault as a file in specified directory for future use and store of encrypted passwords.
     def create_vault(self):
         default_directory = self.directory
         default_filename = self.filename 
@@ -26,6 +37,7 @@ class Vault(models.Model):
             return True
         return False
 
+    # adding passwords to the vault file after encrypting them
     def add_data(self, sitename, password):
         try:
             user = self.username
@@ -36,7 +48,7 @@ class Vault(models.Model):
             arr_of_passwords = self.get_data()
             print(arr_of_passwords)
             if arr_of_passwords == '':
-                arr_of_passwords = []
+                arr_of_passwords = []                # passwords stored as a JSON array for easy future retrieval and storage
 
             write_descriptor = open(default_directory + '/' + default_filename, 'w')
             write_data = {'site_name': sitename, 'password': password}
@@ -44,7 +56,7 @@ class Vault(models.Model):
                 return 2
             arr_of_passwords.append(write_data)
             write_data = JSONRenderer().render(arr_of_passwords)
-            encrypted_data = encrypt_data(key, write_data)
+            encrypted_data = encrypt_data(key, write_data)      # this encrypt_data function is defined in extra_functions module. It takes some data and encrypts it using cryptography.fernet (refer cryptography.fernet module).
             write_descriptor.write(encrypted_data)
             write_descriptor.close()
             return 0
@@ -53,6 +65,7 @@ class Vault(models.Model):
                 write_descriptor.close()
             return 1
 
+    # read data from the vault file and decrypt them before dispatch
     def get_data(self):
         try:
             user = self.username
@@ -64,7 +77,7 @@ class Vault(models.Model):
             if data == '':
                read_descriptor.close()
                return data
-            read_data = io.BytesIO(decrypt_data(key, data))
+            read_data = io.BytesIO(decrypt_data(key, data))   # the decrypt_data function is defined in extra_functions module. It decrypts data given by generating a fernet key from PBKDF2 using user creds.
             json_read_data = JSONParser().parse(read_data)
             read_descriptor.close()
             return json_read_data
@@ -72,7 +85,7 @@ class Vault(models.Model):
             read_descriptor.close()
             return 1
  
-# Not tested delete functionality yet. Might implement in future.
+# Delete Record functionality in vault.Not tested delete functionality yet. Might implement in future.
 
 '''    def delete_data(self, sitename, password):
         try:

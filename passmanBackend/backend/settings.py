@@ -129,6 +129,8 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Settings for Django REST Framework. This includes DEFAULT_AUTHENTICATION_CLASSES for default auth methods.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
@@ -137,6 +139,7 @@ REST_FRAMEWORK = {
     ],
 }
 
+# Cors headers allowed origins. Used to allow loading of resources from different origins. This is particularly important when accessing the backend from a frontend like ReactJS or others.
 CORS_ALLOWED_ORIGINS = [
   'http://localhost:3000',
 ]

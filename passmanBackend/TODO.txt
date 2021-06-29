@@ -1,0 +1,4 @@
+1. Clean up the code.
+2. Make the code more efficient. Eliminate unnecessary global code and remove redundant initializations.
+3. Further decouple all the modules if possible for easy reuse, understanding and modification.
+4. Edit unmaintainable code and rewrite for better clarity if required.

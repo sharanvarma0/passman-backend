@@ -1,9 +1,23 @@
+''' This module defines viewsets for the backend. Each viewset is executed according to the endpoint queried and the method requested. Not all viewsets support all methods.
+
+UserViewSet: Checks authentication and returns information about currently logged in user. Works in /users/ endpoint.
+VaultViewSet: if Authenticated, create, list or retrieve vaults of the user. Works in /vaults/ endpoint.
+VaultRecordViewSet: if Authenticated, get list of vaults or get records in a particular vault by quering the vault number using GET
+
+Each ViewSet returns a Response object which REST Framework processes to display either requested data or the error for successful or unsuccessful calls respectively
+The urls.py file defines a router which invokes these viewsets depending on the path which is matching. 
+'''
+
+
 from backend import vault_serializers
 from vault_backend.models import Vault
 from django.contrib.auth.models import User, AnonymousUser
 from rest_framework import viewsets
 from rest_framework.response import Response
 import os
+
+# GET: return info/list of users. 
+# POST: create a new User.
 
 class UserViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -49,6 +63,10 @@ class UserViewSet(viewsets.ViewSet):
                'Result': 'Failed',
                'Message': 'Some Error occurred',
             }) 
+
+#-------------------------------------------------------------------------------
+# GET: return list of vaults
+# POST: create a new vault
 
 class VaultViewSet(viewsets.ViewSet):
     
@@ -125,6 +143,9 @@ class VaultViewSet(viewsets.ViewSet):
         return Response ({
           'Result':'Success'
         })
+#----------------------------------------------------------------------------
+# GET /<pk>: return records for that particular vault with pk (primary key)
+# POST: Create a new record in the specified vault.
 
 class VaultRecordViewSet(viewsets.ViewSet):
     def list(self, request):

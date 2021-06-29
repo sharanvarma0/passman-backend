@@ -1,3 +1,14 @@
+''' This module defines all the serializers. The serializers are required to convert Django models and objects to primitive types and render them as JSON,XML,etc for easy transfer.
+3 seralizers:
+
+User Serializer: Handles serialization/Deserialization of the User model for authentication. User is an inbuilt model in django.contrib.auth.models. Very useful for authentication purposes
+
+Vault Serializer: Seriliazation/Deserialization for vault. It takes parameters from request to create a vault or update an existing vault if required.
+
+Vault Record Serializer: Seriliazation/Deserialization for a record in the vault. Creates a new record in the vault if required.
+'''
+
+
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from vault_backend import models
@@ -6,11 +17,17 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
+
+# This piece of code is a supplementary code which allows automatic creation of an authtoken whenever a user is created. 
+# Helpful as we do not need a seperate routine and trigger that when a new user is created for creating an API auth token.
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
 
+
+# User serializer only creates new users. A new creation triggers the receiver dispatch above that binds a Token model instance to this user. This token can be used for API authentication
 
 class UserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=200)
@@ -32,6 +49,8 @@ class UserSerializer(serializers.Serializer):
             User.objects.get(username=username).delete()
             return 1 
 
+
+# Vault Serializer creates or updates a new vault based on method (POST, UPDATE) executed. You can see vault documentation in vault_backend/models.py module
 
 class VaultSerializer(serializers.Serializer):
     number = serializers.IntegerField(required=False)
@@ -55,6 +74,8 @@ class VaultSerializer(serializers.Serializer):
         instance.vault_name = validated_data.get('vault_name')
         instance.save()
         return instance
+
+# Each vault record represents a record stored in the vault. This serializer stringifies them. Some methods used here is in the Vault model defined. Please refer that module for more info.
 
 class VaultRecordSerializer(serializers.Serializer):
     vault_name = serializers.CharField(max_length=200)
