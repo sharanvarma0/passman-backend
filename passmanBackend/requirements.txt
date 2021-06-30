@@ -1,0 +1,7 @@
+auditwheel
+django-rest-framework
+django
+django-cors-headers
+pyio
+cryptography
+
