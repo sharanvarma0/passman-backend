@@ -48,6 +48,26 @@ class UserSerializer(serializers.Serializer):
         except:
             User.objects.get(username=username).delete()
             return 1 
+    
+    # The following code is for updating user or password. This is still under testing. Need to test some corner cases but I suppose it will suffice for now.
+    def update(self, instance, validated_data):
+        username = validated_data.get('username')
+        password = validated_data.get('password')
+
+        try:
+            if not User.objects.get(username=username):
+                print("User %s does not exist. Creating user" %(username))
+                self.create(validated_data)
+                return 0
+            instance.username = username
+            instance.set_password(password)
+            instance.save()
+            print("User %s updated" % (username))
+            return instance
+        except:
+            User.objects.delete(username=username)
+            return None
+              
 
 
 # Vault Serializer creates or updates a new vault based on method (POST, UPDATE) executed. You can see vault documentation in vault_backend/models.py module
