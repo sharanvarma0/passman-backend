@@ -28,6 +28,9 @@ from backend.vault_viewsets import *
 # Using the rest_framework provided router class here to automatically generate views from viewsets defined. Makes things a lot easier. I have used defaultRouter here.
 # Might use another router in the future if it makes things easy. As you know, still learning :).
 
+# One special url you would see is the obtain_auth_token url which is just picked from rest_framework.authtoken views library. This allows you to obtain an auth token for the user as soon as they 
+# query the endpoint specified. This is not something I developed. Please do take a look at the django rest_framework documentation to know more about this.
+
 router = routers.DefaultRouter()
 router.register(r'vaults',VaultViewSet, basename='vault')
 router.register(r'users', UserViewSet, basename='user')
