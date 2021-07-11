@@ -18,7 +18,7 @@ from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 
 
-# This piece of code is a supplementary code which allows automatic creation of an authtoken whenever a user is created. 
+# This code allows automatic creation of an authtoken whenever a user is created. 
 # Helpful as we do not need a seperate routine and trigger that when a new user is created for creating an API auth token.
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
